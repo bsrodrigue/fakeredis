@@ -1,6 +1,6 @@
 import socket
 import selectors
-from protocol import CacheProtocol, ProtocolError
+from protocol import CacheProtocol
 from cache import InMemoryCache
 
 selector = selectors.DefaultSelector()
@@ -59,7 +59,6 @@ def handle_connection(key, mask):
 
 def main():
     with ServerSocketManager(host="localhost", port=8080) as server_socket:
-        # Register server socket
         selector.register(server_socket, selectors.EVENT_READ, data=SERVER_SOCKET_KEY)
         print("PoorRedis v0.0.1")
 
@@ -75,11 +74,9 @@ def main():
                     selector.register(
                         client_conn,
                         selectors.EVENT_READ,
-                        data={"addr": client_addr, "inb": b"", "outb": b""},
                     )
 
                 else:
-                    # Handle connection
                     handle_connection(key, mask)
 
 
